@@ -1,0 +1,14 @@
+address: '0.0.0.0:18080'
+templates:
+    - wvpPath: './template/standalone/application.yml'
+      zlmPath: './template/standalone/config.ini'
+      nginxPath: ''
+      httpPrefix: 'http://127.0.0.1:18080/files/'
+      mode: 1 # 1-单机版 2-单机对讲nginx版
+      dir: "./static/"
+    - wvpPath: './template/standalone_intercom/application.yml'
+      zlmPath: './template/standalone_intercom/config.ini'
+      nginxPath: './template/standalone_intercom/nginx.conf'
+      httpPrefix: 'http://127.0.0.1:18080/files/'
+      mode: 2 # 1-单机版 2-单机对讲nginx版
+      dir: "./static/"

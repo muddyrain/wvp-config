@@ -1,4 +1,4 @@
-package internal
+package conf
 
 type ArchitectureOptions uint
 

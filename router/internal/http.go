@@ -1,17 +1,19 @@
 package internal
 
 import (
+	"wvp-config/conf"
 	"wvp-config/router/internal/model"
 )
 
 type (
 	Request struct {
-		Architecture ArchitectureOptions `json:"mode"`
+		Architecture conf.ArchitectureOptions `json:"mode"`
 		// ExternalIP 外网IP
 		ExternalIP string `json:"externalIP" binding:"required"`
 		// ExternalPort 外网端口 指wvp的web页面的
 		ExternalPort int `json:"externalPort" binding:"required"`
 		WvpConfigOption
+		secret string
 	}
 
 	WvpConfigOption struct {
@@ -31,13 +33,13 @@ type (
 	}
 
 	TemplateDetails struct {
-		Architecture ArchitectureOptions `json:"mode"`
-		ImageApi     string              `json:"imageApi"`
+		Architecture conf.ArchitectureOptions `json:"mode"`
+		ImageApi     string                   `json:"imageApi"`
 	}
 
 	ConfigDetails struct {
-		FileType FileType `json:"fileType"`
-		Content  string   `json:"content"`
-		Data     any      `json:"data"`
+		FileType conf.FileType `json:"fileType"`
+		Content  string        `json:"content"`
+		Url      string        `json:"url"`
 	}
 )

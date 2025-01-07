@@ -34,7 +34,7 @@ spring:
           driver-class-name: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://127.0.0.1:3306/wvp?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8
           username: root
-          password: abc123+-ABC
+          password: leetcode112633CD..
           hikari:
             connection-timeout: 20000             # 是客户端等待连接池连接的最大毫秒数
             initialSize: 50                       # 连接池初始化连接数
@@ -47,7 +47,7 @@ pagehelper:
 
 #[可选] WVP监听的HTTP端口, 网页和接口调用都是这个端口
 server:
-  port: 8080
+  port: 12336
   # [可选] HTTPS配置， 默认不开启
   ssl:
     # [可选] 是否开启HTTPS访问
@@ -72,14 +72,14 @@ sip:
   # 请不要使用127.0.0.1，任何包括localhost在内的域名都是不可以的。
   ip: 0.0.0.0
   # [可选] 28181服务监听的端口
-  port: 15060
+  port: 15061
   # 根据国标6.1.2中规定，domain宜采用ID统一编码的前十位编码。国标附录D中定义前8位为中心编码（由省级、市级、区级、基层编号组成，参照GB/T 2260-2007）
   # 后两位为行业编码，定义参照附录D.3
   # 3701020049标识山东济南历下区 信息行业接入
   # [可选]
-  domain: 3707000008
+  domain: 3301820001
   # [可选]37070000082008000002
-  id: 37070000082008000002
+  id: 33018200012007100099
   # [可选] 默认设备认证密码，后续扩展使用设备单独密码, 移除密码将不进行校验
   password:
   # 是否存储alarm信息
@@ -91,7 +91,7 @@ media:
   # [必须修改] zlm服务器的内网IP
   ip: 127.0.0.1
   # [必须修改] zlm服务器的http.port
-  http-port: 13000
+  http-port: 2395
   # [可选] 返回流地址时的ip，置空使用 media.ip
   stream-ip:
   # [可选] wvp在国标信令中使用的ip，此ip为摄像机可以访问到的ip， 置空使用 media.ip
@@ -99,7 +99,7 @@ media:
   # [可选] zlm服务器的hook所使用的IP, 默认使用sip.ip
   hook-ip: 127.0.0.1
   # [可选] zlm服务器的http.sslport, 置空使用zlm配置文件配置
-  http-ssl-port:
+  http-ssl-port: '13038'
   # [可选] 是否自动配置ZLM, 如果希望手动配置ZLM, 可以设为false, 不建议新接触的用户修改
   auto-config: false
   # [可选] zlm服务器的hook.admin_params=secret
@@ -109,9 +109,9 @@ media:
     # [可选] 是否启用多端口模式, 开启后会在portRange范围内选择端口用于媒体流传输
     enable: true
     # [可选] 在此范围内选择端口用于媒体流传输, 必须提前在zlm上配置该属性，不然自动配置此属性可能不成功
-    port-range: 13001,13040 # 端口范围
+    port-range: 13000,13037 # 端口范围
     # [可选] 国标级联在此范围内选择端口发送媒体流,
-    send-port-range: 13041,13050 # 端口范围
+    send-port-range: 13060,13070 # 端口范围
   # 录像辅助服务， 部署此服务可以实现zlm录像的管理与下载， 0 表示不使用
   record-assist-port: 18081
 # [根据业务需求配置]
@@ -174,15 +174,4 @@ user-settings:
   register-keep-int-dialog: false
   # 跨域配置，配置你访问前端页面的地址即可， 可以配置多个
   allowed-origins:
-    - http://127.0.0.1:8080
 
-# [可选] 日志配置, 一般不需要改
-logging:
-  config: classpath:logback-spring.xml
-
-springdoc:
-  api-docs:
-    enabled: false
-  swagger-ui:
-    enabled: false
-    path: /swagger-ui.html

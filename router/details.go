@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
 	"net/http"
+	"wvp-config/conf"
 	"wvp-config/router/internal"
 )
 
@@ -13,12 +14,12 @@ func details(_ context.Context, c *app.RequestContext) {
 		Message: "获取当前模版详细",
 		Data: []internal.TemplateDetails{
 			{
-				Architecture: internal.Standalone,
-				ImageApi:     "/file/standalone.jpg",
+				Architecture: conf.Standalone,
+				ImageApi:     "/files/standalone.jpg",
 			},
 			{
-				Architecture: internal.StandaloneIntercom,
-				ImageApi:     "/file/standaloneIntercom.jpg",
+				Architecture: conf.StandaloneIntercom,
+				ImageApi:     "/files/standaloneIntercom.jpg",
 			},
 		},
 	})

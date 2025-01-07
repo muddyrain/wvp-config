@@ -10,39 +10,38 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"wvp-config/conf"
 	"wvp-config/router/internal/model"
 )
 
 func StandaloneConversion(req Request) []ConfigDetails {
-	wvpConfig := parseWvpConfig(req, "./template/standalone/application.yml")
-	zlmConfig := parseZlmConfig(wvpConfig, "./template/standalone/config.ini")
+	config := conf.GetData().GetConfig(conf.Standalone)
+	wvpConfig := parseWvpConfig(req, config.WvpPath)
+	zlmConfig := parseZlmConfig(wvpConfig, config.ZlmPath)
+	wvpName := fmt.Sprintf("%s_wvp.yaml", zlmConfig.API.Secret)
 	wvpData, _ := yaml.Marshal(wvpConfig)
+	_ = os.WriteFile(config.Dir+wvpName, wvpData, os.ModePerm)
 	cfg := ini.Empty()
 	_ = cfg.ReflectFrom(&zlmConfig)
-	name := fmt.Sprintf("%s_zlm.ini", zlmConfig.API.Secret)
-	_ = cfg.SaveTo(name)
-	zlmData, _ := os.ReadFile(name)
-	defer func() {
-		//_ = os.Remove(name)
-		os.WriteFile("wvp.yaml", wvpData, os.ModePerm)
-	}()
+	zlmName := fmt.Sprintf("%s_zlm.ini", zlmConfig.API.Secret)
+	_ = cfg.SaveTo(config.Dir + zlmName)
+	zlmData, _ := os.ReadFile(config.Dir + zlmName)
 	hint := createHit(req, wvpConfig)
 	b, _ := json.MarshalIndent(hint, "", "  ")
 	return []ConfigDetails{
 		{
-			FileType: WVP,
+			FileType: conf.WVP,
 			Content:  string(wvpData),
-			Data:     wvpConfig,
+			Url:      config.HTTPPrefix + wvpName,
 		},
 		{
-			FileType: ZLM,
+			FileType: conf.ZLM,
 			Content:  string(zlmData),
-			Data:     zlmConfig,
+			Url:      config.HTTPPrefix + zlmName,
 		},
 		{
-			FileType: TXT,
+			FileType: conf.TXT,
 			Content:  string(b),
-			Data:     hint,
 		},
 	}
 }
@@ -78,7 +77,6 @@ func parseWvpConfig(req Request, path string) model.WvpConfig {
 	wvpConfig.Server.Port = req.ExternalPort
 	wvpConfig.Media.SdpIP = req.ExternalIP
 	wvpConfig.Media.StreamIP = req.ExternalIP
-	wvpConfig.Media.Secret = uuid.New().String()
 	wvpConfig.UserSettings.AllowedOrigins = append(wvpConfig.UserSettings.AllowedOrigins,
 		fmt.Sprintf("http://%s:%d", req.ExternalIP, req.ExternalPort))
 	if req.WvpConfigOption.RedisConfig.Enable {
@@ -93,7 +91,10 @@ func parseWvpConfig(req Request, path string) model.WvpConfig {
 	if req.WvpConfigOption.MediaConfig.Enable {
 		wvpConfig.Media = req.WvpConfigOption.MediaConfig
 	}
-
+	if req.secret == "" {
+		req.secret = uuid.New().String()
+	}
+	wvpConfig.Media.Secret = req.secret
 	return wvpConfig
 }
 
